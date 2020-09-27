@@ -1,44 +1,31 @@
 package com.programacionymas.photosearchtv
 
-import java.util.Collections
-import java.util.Timer
-import java.util.TimerTask
-
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
-import androidx.leanback.app.BackgroundManager
-import androidx.leanback.app.BrowseFragment
-import androidx.leanback.widget.ArrayObjectAdapter
-import androidx.leanback.widget.HeaderItem
-import androidx.leanback.widget.ImageCardView
-import androidx.leanback.widget.ListRow
-import androidx.leanback.widget.ListRowPresenter
-import androidx.leanback.widget.OnItemViewClickedListener
-import androidx.leanback.widget.OnItemViewSelectedListener
-import androidx.leanback.widget.Presenter
-import androidx.leanback.widget.Row
-import androidx.leanback.widget.RowPresenter
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.ContextCompat
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
+import androidx.leanback.app.BackgroundManager
+import androidx.leanback.app.BrowseSupportFragment
+import androidx.leanback.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
+import java.util.*
 
 /**
  * Loads a grid of cards with movies to browse.
  */
-class MainFragment : BrowseFragment() {
+class MainFragment : BrowseSupportFragment() {
 
     private val mHandler = Handler()
     private lateinit var mBackgroundManager: BackgroundManager
@@ -69,22 +56,22 @@ class MainFragment : BrowseFragment() {
     private fun prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance(activity)
-        mBackgroundManager.attach(activity.window)
-        mDefaultBackground = ContextCompat.getDrawable(activity, R.drawable.default_background)
+        mBackgroundManager.attach(activity?.window)
+        mDefaultBackground = activity?.let { ContextCompat.getDrawable(it, R.drawable.default_background) }
         mMetrics = DisplayMetrics()
-        activity.windowManager.defaultDisplay.getMetrics(mMetrics)
+        activity?.windowManager?.defaultDisplay?.getMetrics(mMetrics)
     }
 
     private fun setupUIElements() {
         title = getString(R.string.browse_title)
         // over title
-        headersState = BrowseFragment.HEADERS_ENABLED
+        headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
 
-        // set fastLane (or headers) background color
-        brandColor = ContextCompat.getColor(activity, R.color.fastlane_background)
-        // set search icon color
-        searchAffordanceColor = ContextCompat.getColor(activity, R.color.search_opaque)
+        activity?.let {
+            // set search icon color
+            searchAffordanceColor = ContextCompat.getColor(it, R.color.search_opaque)
+        }
     }
 
     private fun loadRows() {
@@ -135,16 +122,20 @@ class MainFragment : BrowseFragment() {
                 row: Row) {
 
             if (item is Movie) {
-                Log.d(TAG, "Item: " + item.toString())
+                Log.d(TAG, "Item: $item")
                 val intent = Intent(activity, DetailsActivity::class.java)
                 intent.putExtra(DetailsActivity.MOVIE, item)
 
-                val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        activity,
+                activity?.let {
+                    val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        it,
                         (itemViewHolder.view as ImageCardView).mainImageView,
                         DetailsActivity.SHARED_ELEMENT_NAME)
                         .toBundle()
-                activity.startActivity(intent, bundle)
+
+                    it.startActivity(intent, bundle)
+                }
+
             } else if (item is String) {
                 if (item.contains(getString(R.string.error_fragment))) {
                     val intent = Intent(activity, BrowseErrorActivity::class.java)
@@ -202,7 +193,12 @@ class MainFragment : BrowseFragment() {
             view.layoutParams = ViewGroup.LayoutParams(GRID_ITEM_WIDTH, GRID_ITEM_HEIGHT)
             view.isFocusable = true
             view.isFocusableInTouchMode = true
-            view.setBackgroundColor(ContextCompat.getColor(activity, R.color.default_background))
+
+            activity?.let {
+                view.setBackgroundColor(ContextCompat.getColor(it, R.color.default_background))
+            }
+
+
             view.setTextColor(Color.WHITE)
             view.gravity = Gravity.CENTER
             return Presenter.ViewHolder(view)
