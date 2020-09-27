@@ -20,6 +20,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
+import com.programacionymas.model.Movie
+import com.programacionymas.model.MovieList
 import java.util.*
 
 /**
@@ -33,6 +35,12 @@ class MainFragment : BrowseSupportFragment() {
     private lateinit var mMetrics: DisplayMetrics
     private var mBackgroundTimer: Timer? = null
     private var mBackgroundUri: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        headersState = HEADERS_DISABLED
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         Log.i(TAG, "onCreate")
@@ -50,6 +58,7 @@ class MainFragment : BrowseSupportFragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy: " + mBackgroundTimer?.toString())
+
         mBackgroundTimer?.cancel()
     }
 
@@ -64,8 +73,7 @@ class MainFragment : BrowseSupportFragment() {
 
     private fun setupUIElements() {
         title = getString(R.string.browse_title)
-        // over title
-        headersState = HEADERS_ENABLED
+
         isHeadersTransitionOnBackEnabled = true
 
         activity?.let {
@@ -84,14 +92,23 @@ class MainFragment : BrowseSupportFragment() {
             if (i != 0) {
                 Collections.shuffle(list)
             }
+
             val listRowAdapter = ArrayObjectAdapter(cardPresenter)
             for (j in 0 until NUM_COLS) {
                 listRowAdapter.add(list[j % 5])
             }
-            val header = HeaderItem(i.toLong(), MovieList.MOVIE_CATEGORY[i])
-            rowsAdapter.add(ListRow(header, listRowAdapter))
+
+            // val header = HeaderItem(i.toLong(), MovieList.MOVIE_CATEGORY[i])
+            // rowsAdapter.add(ListRow(header, listRowAdapter))
+            rowsAdapter.add(ListRow(listRowAdapter))
         }
 
+        // rowsAdapter.add(getPreferencesListRow())
+
+        adapter = rowsAdapter
+    }
+
+    private fun getPreferencesListRow(): ListRow {
         val gridHeader = HeaderItem(NUM_ROWS.toLong(), "PREFERENCES")
 
         val mGridPresenter = GridItemPresenter()
@@ -99,9 +116,8 @@ class MainFragment : BrowseSupportFragment() {
         gridRowAdapter.add(resources.getString(R.string.grid_view))
         gridRowAdapter.add(getString(R.string.error_fragment))
         gridRowAdapter.add(resources.getString(R.string.personal_settings))
-        rowsAdapter.add(ListRow(gridHeader, gridRowAdapter))
 
-        adapter = rowsAdapter
+        return ListRow(gridHeader, gridRowAdapter)
     }
 
     private fun setupEventListeners() {

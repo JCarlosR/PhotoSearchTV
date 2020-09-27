@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.model
 
 import java.io.Serializable
 

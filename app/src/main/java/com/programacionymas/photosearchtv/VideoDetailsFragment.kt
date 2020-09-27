@@ -30,6 +30,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
+import com.programacionymas.model.Movie
+import com.programacionymas.model.MovieList
 
 import java.util.Collections
 
@@ -129,8 +131,7 @@ class VideoDetailsFragment : DetailsFragment() {
     private fun setupDetailsOverviewRowPresenter() {
         // Set detail background.
         val detailsPresenter = FullWidthDetailsOverviewRowPresenter(DetailsDescriptionPresenter())
-        detailsPresenter.backgroundColor =
-                ContextCompat.getColor(activity, R.color.selected_background)
+        detailsPresenter.backgroundColor = ContextCompat.getColor(activity, R.color.selected_background)
 
         // Hook up transition element.
         val sharedElementHelper = FullWidthDetailsOverviewSharedElementHelper()

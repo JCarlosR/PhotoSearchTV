@@ -1,6 +1,7 @@
 package com.programacionymas.photosearchtv
 
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter
+import com.programacionymas.model.Movie
 
 class DetailsDescriptionPresenter : AbstractDetailsDescriptionPresenter() {
 

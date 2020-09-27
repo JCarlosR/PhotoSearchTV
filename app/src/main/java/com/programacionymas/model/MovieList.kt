@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.model
 
 object MovieList {
     val MOVIE_CATEGORY = arrayOf(
@@ -7,7 +7,8 @@ object MovieList {
             "Category Two",
             "Category Three",
             "Category Four",
-            "Category Five")
+            "Category Five"
+    )
 
     val list: List<Movie> by lazy {
         setupMovies()
