@@ -5,6 +5,6 @@
     <color name="background_gradient_end">#DDDDDD</color>
 
     <color name="search_opaque">#2f8a95</color>
-    <color name="selected_background">#2F8A95</color>
-    <color name="default_background">#4B3D3D3D</color>
+    <color name="selected_background">#DF2F8A95</color>
+    <color name="default_background">#483D3D3D</color>
 </resources>
