@@ -2,10 +2,7 @@ package com.programacionymas.photosearchtv
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
@@ -16,12 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.SimpleTarget
-import com.programacionymas.model.Movie
-import com.programacionymas.model.MovieList
+import com.programacionymas.model.Photo
+import com.programacionymas.model.PhotoList
 import java.util.*
 
 /**
@@ -68,7 +61,7 @@ class MainFragment : BrowseSupportFragment() {
     }
 
     private fun loadRows() {
-        val list = MovieList.list
+        val list = PhotoList.list
 
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         val cardPresenter = CardPresenter()
@@ -109,16 +102,16 @@ class MainFragment : BrowseSupportFragment() {
                 rowViewHolder: RowPresenter.ViewHolder,
                 row: Row) {
 
-            if (item is Movie) {
+            if (item is Photo) {
                 Log.d(TAG, "Item: $item")
-                val intent = Intent(activity, DetailsActivity::class.java)
-                intent.putExtra(DetailsActivity.MOVIE, item)
+                val intent = Intent(activity, PhotoActivity::class.java)
+                intent.putExtra(PhotoActivity.MOVIE, item)
 
                 activity?.let {
                     val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         it,
                         (itemViewHolder.view as ImageCardView).mainImageView,
-                        DetailsActivity.SHARED_ELEMENT_NAME)
+                        PhotoActivity.SHARED_ELEMENT_NAME)
                         .toBundle()
 
                     it.startActivity(intent, bundle)

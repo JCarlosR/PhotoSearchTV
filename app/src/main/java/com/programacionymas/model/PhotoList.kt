@@ -1,21 +1,12 @@
 package com.programacionymas.model
 
-object MovieList {
-    val MOVIE_CATEGORY = arrayOf(
-            "Category Zero",
-            "Category One",
-            "Category Two",
-            "Category Three",
-            "Category Four",
-            "Category Five"
-    )
-
-    val list: List<Movie> by lazy {
+object PhotoList {
+    val list: List<Photo> by lazy {
         setupMovies()
     }
     private var count: Long = 0
 
-    private fun setupMovies(): List<Movie> {
+    private fun setupMovies(): List<Photo> {
         val title = arrayOf(
                 "Zeitgeist 2010_ Year in Review",
                 "Google Demo Slam_ 20ft Search",
@@ -73,8 +64,8 @@ object MovieList {
             studio: String,
             videoUrl: String,
             cardImageUrl: String,
-            backgroundImageUrl: String): Movie {
-        val movie = Movie()
+            backgroundImageUrl: String): Photo {
+        val movie = Photo()
         movie.id = count++
         movie.title = title
         movie.description = description

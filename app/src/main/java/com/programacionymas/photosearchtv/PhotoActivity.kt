@@ -8,11 +8,17 @@ class PhotoActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(R.layout.activity_details)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .replace(android.R.id.content, PhotoFragment())
                     .commit()
         }
+    }
+
+    companion object {
+        const val SHARED_ELEMENT_NAME = "hero"
+        const val MOVIE = "Movie"
     }
 }

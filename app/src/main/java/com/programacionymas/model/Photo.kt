@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Movie class represents video entity with title, description, image thumbs and video url.
  */
-data class Movie(
+data class Photo(
         var id: Long = 0,
         var title: String? = null,
         var description: String? = null,
