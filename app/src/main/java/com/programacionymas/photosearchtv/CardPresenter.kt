@@ -43,18 +43,18 @@ class CardPresenter : Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        val movie = item as Photo
+        val photo = item as Photo
         val cardView = viewHolder.view as ImageCardView
 
         Log.d(TAG, "onBindViewHolder")
 
         cardView.cardType = BaseCardView.CARD_TYPE_INFO_OVER
-        cardView.titleText = movie.title
-        cardView.contentText = movie.author
+        cardView.titleText = photo.title
+        cardView.contentText = "${photo.author} / ${photo.getFormattedDate()}"
         cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT)
 
         Glide.with(viewHolder.view.context)
-            .load(movie.getUrlSmall())
+            .load(photo.getUrlSmall())
             .centerCrop()
             .error(mDefaultCardImage)
             .into(cardView.mainImageView)

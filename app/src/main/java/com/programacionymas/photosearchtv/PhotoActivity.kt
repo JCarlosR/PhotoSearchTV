@@ -1,7 +1,6 @@
 package com.programacionymas.photosearchtv
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.programacionymas.model.Photo
@@ -14,8 +13,6 @@ class PhotoActivity : FragmentActivity() {
         setContentView(R.layout.activity_photo)
 
         val photo = intent?.getSerializableExtra(PHOTO_PARAM) as Photo
-
-        // Toast.makeText(this, imageUrl, Toast.LENGTH_SHORT).show()
 
         Glide.with(this)
             .load(photo.getUrlLarge())

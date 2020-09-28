@@ -131,14 +131,11 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
                 val photos = it.photos.photo
 
                 loadRows(photos)
-                // Toast.makeText(activity, "size = ${photos.size}", Toast.LENGTH_SHORT).show()
-                // Log.d("MainFragment", photos[0].getUrlSmall())
-                // Log.d("MainFragment", photos[0].getUrlLarge())
             }
         }
     }
 
     override fun onFailure(call: Call<GetPhotosResponse>, t: Throwable) {
-
+        Toast.makeText(activity, t.localizedMessage, Toast.LENGTH_SHORT).show()
     }
 }

@@ -2,6 +2,9 @@ package com.programacionymas.model
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.text.SimpleDateFormat
+import java.util.*
+
 /*
 {
     "id": "8432423659",
@@ -11,8 +14,6 @@ import java.io.Serializable
     "farm": 9,
     "title": "Color",
     "ispublic": 1,
-    "isfriend": 0,
-    "isfamily": 0,
     "dateupload": "1359655414",
     "ownername": "DaneMakes",
     "is_primary": 1,
@@ -27,7 +28,7 @@ data class Photo(
     var server: String? = null,
     var farm: Int? = null,
     var secret: String? = null,
-    @SerializedName("dateupload") var dateUpload: String? = null
+    @SerializedName("dateupload") var dateUpload: Long = 0
 ) : Serializable {
 
     override fun toString(): String {
@@ -44,6 +45,10 @@ data class Photo(
 
     fun getUrlLarge(): String {
         return "https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_b.jpg"
+    }
+
+    fun getFormattedDate(): String {
+        return SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH).format(dateUpload * 1000L)
     }
 
     companion object {
