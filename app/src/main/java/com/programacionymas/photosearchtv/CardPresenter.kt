@@ -47,7 +47,7 @@ class CardPresenter : Presenter() {
         Log.d(TAG, "onBindViewHolder")
         if (movie.cardImageUrl != null) {
             cardView.titleText = movie.title
-            cardView.contentText = movie.studio
+            cardView.contentText = movie.author
             cardView.setMainImageDimensions(CARD_WIDTH, CARD_HEIGHT)
 
             Glide.with(viewHolder.view.context)

@@ -12,7 +12,7 @@ class PhotoFragment : BrandedSupportFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val (_, title, description, _, _, videoUrl) =
+        val (_, title, author, videoUrl) =
                 activity?.intent?.getSerializableExtra(PhotoActivity.MOVIE) as Photo
 
         // mSelectedMovie = activity?.intent?.getSerializableExtra(DetailsActivity.MOVIE) as Movie

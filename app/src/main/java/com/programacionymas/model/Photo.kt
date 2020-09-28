@@ -8,18 +8,16 @@ import java.io.Serializable
 data class Photo(
         var id: Long = 0,
         var title: String? = null,
-        var description: String? = null,
+        var author: String? = null,
         var backgroundImageUrl: String? = null,
-        var cardImageUrl: String? = null,
-        var videoUrl: String? = null,
-        var studio: String? = null
+        var cardImageUrl: String? = null
 ) : Serializable {
 
     override fun toString(): String {
         return "Movie{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", videoUrl='" + videoUrl + '\'' +
+                ", author='" + author + '\'' +
                 ", backgroundImageUrl='" + backgroundImageUrl + '\'' +
                 ", cardImageUrl='" + cardImageUrl + '\'' +
                 '}'
