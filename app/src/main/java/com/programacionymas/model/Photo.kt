@@ -27,10 +27,7 @@ data class Photo(
     var server: String? = null,
     var farm: Int? = null,
     var secret: String? = null,
-    @SerializedName("dateupload") var dateUpload: String? = null,
-
-    var backgroundImageUrl: String? = null,
-    var cardImageUrl: String? = null
+    @SerializedName("dateupload") var dateUpload: String? = null
 ) : Serializable {
 
     override fun toString(): String {
@@ -39,6 +36,14 @@ data class Photo(
             ", title='" + title + '\'' +
             ", author='" + author + '\'' +
         '}'
+    }
+
+    fun getUrlSmall(): String {
+        return "https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_s.jpg"
+    }
+
+    fun getUrlLarge(): String {
+        return "https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_b.jpg"
     }
 
     companion object {

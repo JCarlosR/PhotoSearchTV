@@ -4,7 +4,6 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import com.programacionymas.model.Photo
-import com.programacionymas.model.PhotoList
 
 class SearchRunnable(private val updateRowsAdapter: (List<ListRow>)->Unit): Runnable {
 
@@ -30,7 +29,7 @@ class SearchRunnable(private val updateRowsAdapter: (List<ListRow>)->Unit): Runn
         } else {
             val resultsHeader = HeaderItem(0, "Search results for '$searchQuery'")
 
-            listRowAdapter.add(PhotoList.list[0])
+            // listRowAdapter.add(PhotoList.list[0])
 
             listOf(
                 ListRow(resultsHeader, listRowAdapter)

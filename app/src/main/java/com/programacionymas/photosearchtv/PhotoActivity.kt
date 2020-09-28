@@ -13,21 +13,18 @@ class PhotoActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
 
-        val (_, title, author, imageUrl) =
-            intent?.getSerializableExtra(PhotoActivity.MOVIE) as Photo
+        val photo = intent?.getSerializableExtra(PHOTO_PARAM) as Photo
 
-        // mSelectedMovie = activity?.intent?.getSerializableExtra(DetailsActivity.MOVIE) as Movie
-
-        Toast.makeText(this, imageUrl, Toast.LENGTH_SHORT).show()
+        // Toast.makeText(this, imageUrl, Toast.LENGTH_SHORT).show()
 
         Glide.with(this)
-            .load(imageUrl)
+            .load(photo.getUrlLarge())
             .centerCrop()
             .into(imageView)
     }
 
     companion object {
         const val SHARED_ELEMENT_NAME = "hero"
-        const val MOVIE = "Movie"
+        const val PHOTO_PARAM = "Photo"
     }
 }
