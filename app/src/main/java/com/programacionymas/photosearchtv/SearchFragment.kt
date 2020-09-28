@@ -1,13 +1,14 @@
 package com.programacionymas.photosearchtv
 
-import android.R
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import androidx.leanback.app.SearchSupportFragment
-import androidx.leanback.widget.*
-import com.programacionymas.model.Photo
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.ObjectAdapter
 
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {

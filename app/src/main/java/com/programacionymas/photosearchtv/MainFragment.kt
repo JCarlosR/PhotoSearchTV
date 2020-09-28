@@ -13,14 +13,19 @@ import androidx.core.content.ContextCompat
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
+import com.programacionymas.io.MyApiAdapter
+import com.programacionymas.io.response.GetPhotosResponse
 import com.programacionymas.model.Photo
 import com.programacionymas.model.PhotoList
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 /**
  * Loads a grid of cards with movies to browse.
  */
-class MainFragment : BrowseSupportFragment() {
+class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
 
     private lateinit var mBackgroundManager: BackgroundManager
 
@@ -61,15 +66,16 @@ class MainFragment : BrowseSupportFragment() {
     }
 
     private fun loadRows() {
+        val call = MyApiAdapter.getApiService().getPhotos("869d0e99855f9a170627b77ef02bc13a", galleryId = "66911286-72157647277042064")
+        call.enqueue(this)
+
+
         val list = PhotoList.list
 
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         val cardPresenter = CardPresenter()
 
         for (i in 0 until NUM_ROWS) {
-            if (i != 0) {
-                Collections.shuffle(list)
-            }
 
             val listRowAdapter = ArrayObjectAdapter(cardPresenter)
             for (j in 0 until NUM_COLS) {
@@ -154,5 +160,18 @@ class MainFragment : BrowseSupportFragment() {
         private const val GRID_ITEM_HEIGHT = 200
         private const val NUM_ROWS = 6
         private const val NUM_COLS = 15
+    }
+
+    override fun onResponse(call: Call<GetPhotosResponse>, response: Response<GetPhotosResponse>) {
+        if (response.isSuccessful) {
+            response.body()?.let {
+                val photos = it.photos.photo
+                Toast.makeText(activity, "size = ${photos.size}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onFailure(call: Call<GetPhotosResponse>, t: Throwable) {
+
     }
 }
