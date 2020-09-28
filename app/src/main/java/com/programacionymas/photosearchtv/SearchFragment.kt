@@ -1,18 +1,20 @@
 package com.programacionymas.photosearchtv
 
+import android.R
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import androidx.leanback.app.SearchSupportFragment
-import androidx.leanback.widget.ArrayObjectAdapter
-import androidx.leanback.widget.ListRowPresenter
-import androidx.leanback.widget.ObjectAdapter
+import androidx.leanback.widget.*
+import com.programacionymas.model.Photo
+
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
     private val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+
     private val handler = Handler(Looper.getMainLooper())
-    private val delayedLoad = SearchRunnable()
+    private val delayedLoad = SearchRunnable(::updateRowsAdapter)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,12 +23,19 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         // setOnItemClickedListener(getDefaultItemClickedListener())
     }
 
+    private fun updateRowsAdapter(listRows: List<ListRow>) {
+        listRows.forEach {
+            rowsAdapter.add(it)
+        }
+    }
+
     override fun getResultsAdapter(): ObjectAdapter {
         return rowsAdapter
     }
 
     override fun onQueryTextChange(newQuery: String): Boolean {
         rowsAdapter.clear()
+
         if (!TextUtils.isEmpty(newQuery)) {
             delayedLoad.searchQuery = newQuery
             handler.removeCallbacks(delayedLoad)
