@@ -24,8 +24,6 @@ import retrofit2.Response
 
 class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
 
-    private lateinit var mBackgroundManager: BackgroundManager
-
     private val mPhotoPages: HashMap<Int, List<Photo>> = HashMap()
 
     private val rowsAdapter by lazy {
@@ -55,11 +53,10 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         setupEventListeners()
     }
 
-
     private fun prepareBackgroundManager() {
-        mBackgroundManager = BackgroundManager.getInstance(activity)
-        mBackgroundManager.attach(activity?.window)
-        mBackgroundManager.color = Color.BLACK
+        val backgroundManager = BackgroundManager.getInstance(activity)
+        backgroundManager.attach(activity?.window)
+        backgroundManager.color = Color.BLACK
     }
 
     private fun setupUIElements() {

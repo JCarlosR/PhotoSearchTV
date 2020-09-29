@@ -1,17 +1,17 @@
 package com.programacionymas.photosearchtv.ui.fragment
 
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
+import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.SearchSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.ObjectAdapter
 import com.programacionymas.photosearchtv.ui.SearchRunnable
-import com.programacionymas.photosearchtv.ui.activity.SearchActivity
 import com.programacionymas.photosearchtv.ui.listeners.ItemViewClickedListener
 
 
@@ -26,6 +26,18 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         setSearchResultProvider(this)
 
         setupEventListeners()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        prepareBackgroundManager()
+    }
+
+    private fun prepareBackgroundManager() {
+        val backgroundManager = BackgroundManager.getInstance(activity)
+        backgroundManager.attach(activity?.window)
+        backgroundManager.color = Color.BLACK
     }
 
     private fun setupEventListeners() {
