@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.photosearchtv.presenter
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -9,6 +9,7 @@ import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.programacionymas.model.Photo
+import com.programacionymas.photosearchtv.R
 import kotlin.properties.Delegates
 
 /**
@@ -25,7 +26,9 @@ class CardPresenter : Presenter() {
         Log.d(TAG, "onCreateViewHolder")
 
         sDefaultBackgroundColor = ContextCompat.getColor(parent.context, R.color.default_background)
-        sSelectedBackgroundColor = ContextCompat.getColor(parent.context, R.color.selected_background)
+        sSelectedBackgroundColor = ContextCompat.getColor(parent.context,
+            R.color.selected_background
+        )
 
         mDefaultCardImage = ContextCompat.getDrawable(parent.context, R.drawable.movie)
 

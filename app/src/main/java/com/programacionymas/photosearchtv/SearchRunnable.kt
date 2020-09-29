@@ -4,6 +4,7 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import com.programacionymas.model.Photo
+import com.programacionymas.photosearchtv.presenter.CardPresenter
 
 class SearchRunnable(private val updateRowsAdapter: (List<ListRow>)->Unit): Runnable {
 

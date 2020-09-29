@@ -1,9 +1,10 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.photosearchtv.activity
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.programacionymas.model.Photo
+import com.programacionymas.photosearchtv.R
 import kotlinx.android.synthetic.main.activity_photo.*
 
 class PhotoActivity : FragmentActivity() {

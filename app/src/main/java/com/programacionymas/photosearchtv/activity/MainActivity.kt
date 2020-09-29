@@ -1,7 +1,8 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.photosearchtv.activity
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.programacionymas.photosearchtv.R
 
 /**
  * Loads [MainFragment].

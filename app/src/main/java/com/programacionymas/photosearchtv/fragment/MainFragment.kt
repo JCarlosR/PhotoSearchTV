@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.photosearchtv.fragment
 
 import android.content.Intent
 import android.graphics.Color
@@ -13,6 +13,10 @@ import androidx.leanback.widget.*
 import com.programacionymas.io.MyApiAdapter
 import com.programacionymas.io.response.GetPhotosResponse
 import com.programacionymas.model.Photo
+import com.programacionymas.photosearchtv.presenter.CardPresenter
+import com.programacionymas.photosearchtv.R
+import com.programacionymas.photosearchtv.activity.PhotoActivity
+import com.programacionymas.photosearchtv.activity.SearchActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,24 +28,35 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
 
     private lateinit var mBackgroundManager: BackgroundManager
 
+    private val mPhotoPages: HashMap<Int, List<Photo>> = HashMap()
+
+    private val rowsAdapter by lazy {
+        ArrayObjectAdapter(ListRowPresenter())
+    }
+
+    private var lastFetchedPage: Int = 1
+    private var alreadyFetching: Boolean = false
+    private var hasMorePages: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(TAG, "onCreate")
         super.onCreate(savedInstanceState)
 
+        fetchPhotos(1)
         headersState = HEADERS_DISABLED
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        Log.i(TAG, "onCreate")
+        Log.i(TAG, "onActivityCreated")
         super.onActivityCreated(savedInstanceState)
 
         prepareBackgroundManager()
 
         setupUIElements()
 
-        fetchPhotos()
-
         setupEventListeners()
     }
+
 
     private fun prepareBackgroundManager() {
         mBackgroundManager = BackgroundManager.getInstance(activity)
@@ -55,30 +70,40 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         isHeadersTransitionOnBackEnabled = true
 
         activity?.let {
-            // set search icon color
+            // search button color
             searchAffordanceColor = ContextCompat.getColor(it, R.color.search_opaque)
         }
     }
 
-    private fun fetchPhotos() {
-        val call = MyApiAdapter.getApiService().getPhotos("869d0e99855f9a170627b77ef02bc13a", galleryId = "66911286-72157647277042064")
+    private fun fetchPhotos(page: Int) {
+        Log.d("MainFragment", "Fetching page $page")
+        alreadyFetching = true
+
+        val call = MyApiAdapter.getApiService().getPhotos(
+            "869d0e99855f9a170627b77ef02bc13a", galleryId = "66911286-72157647277042064",
+            page = page, perPage = NUM_COLS
+        )
+
         call.enqueue(this)
     }
 
-    private fun loadRows(list: ArrayList<Photo>) {
-
-        val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private fun loadRows(fetchedPage: Int) {
         val cardPresenter = CardPresenter()
 
-
         val listRowAdapter = ArrayObjectAdapter(cardPresenter)
-        for (j in 0 until NUM_COLS) {
-            listRowAdapter.add(list[j])
+
+        val photos: List<Photo>? = mPhotoPages[fetchedPage]
+
+        photos?.let {
+            for (photo in it) {
+                listRowAdapter.add(photo)
+            }
+
+            rowsAdapter.add(ListRow(fetchedPage.toLong(), null, listRowAdapter))
         }
 
         // val header = HeaderItem(i.toLong(), MovieList.MOVIE_CATEGORY[i])
         // rowsAdapter.add(ListRow(header, listRowAdapter))
-        rowsAdapter.add(ListRow(listRowAdapter))
 
         adapter = rowsAdapter
     }
@@ -90,6 +115,7 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         }
 
         onItemViewClickedListener = ItemViewClickedListener()
+        onItemViewSelectedListener = ItemViewSelectedListener()
     }
 
     private inner class ItemViewClickedListener : OnItemViewClickedListener {
@@ -97,10 +123,12 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
                 itemViewHolder: Presenter.ViewHolder,
                 item: Any,
                 rowViewHolder: RowPresenter.ViewHolder,
-                row: Row) {
+                row: Row
+        ) {
 
             if (item is Photo) {
-                Log.d(TAG, "Item: $item")
+                // Log.d(TAG, "Item: $item")
+
                 val intent = Intent(activity, PhotoActivity::class.java)
                 intent.putExtra(PhotoActivity.PHOTO_PARAM, item)
 
@@ -120,6 +148,23 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         }
     }
 
+    private inner class ItemViewSelectedListener : OnItemViewSelectedListener {
+
+        override fun onItemSelected(itemViewHolder: Presenter.ViewHolder?, item: Any?,
+                                    rowViewHolder: RowPresenter.ViewHolder, row: Row) {
+
+            // Toast.makeText(activity, "row id (page) = ${row.id}", Toast.LENGTH_SHORT).show()
+            val page = row.id
+
+            Log.d("MainFragment", "row.id (page) = $page")
+            Log.d("MainFragment", "lastFetchedPage = $lastFetchedPage")
+
+            if (!alreadyFetching && page.toInt() == lastFetchedPage && hasMorePages) {
+                fetchPhotos(lastFetchedPage + 1)
+            }
+        }
+    }
+
     companion object {
         private const val TAG = "MainFragment"
         private const val NUM_COLS = 6
@@ -129,13 +174,32 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         if (response.isSuccessful) {
             response.body()?.let {
                 val photos = it.photos.photo
+                val fetchedPage = it.photos.page
 
-                loadRows(photos)
+                if (photos.isEmpty()) {
+                    hasMorePages = false
+                    return
+                }
+
+                if (photos.size < NUM_COLS) {
+                    hasMorePages = false
+                }
+
+                mPhotoPages[fetchedPage] = photos
+
+                if (fetchedPage > lastFetchedPage)
+                    lastFetchedPage = fetchedPage
+
+                loadRows(fetchedPage)
             }
         }
+
+        alreadyFetching = false
     }
 
     override fun onFailure(call: Call<GetPhotosResponse>, t: Throwable) {
         Toast.makeText(activity, t.localizedMessage, Toast.LENGTH_SHORT).show()
+
+        alreadyFetching = false
     }
 }
