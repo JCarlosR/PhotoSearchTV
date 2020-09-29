@@ -99,11 +99,14 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
                 listRowAdapter.add(photo)
             }
 
-            rowsAdapter.add(ListRow(fetchedPage.toLong(), null, listRowAdapter))
-        }
+            val header = if (fetchedPage == 1) {
+                 HeaderItem(0, "Trending Now On Flickr")
+            } else {
+                null
+            }
 
-        // val header = HeaderItem(i.toLong(), MovieList.MOVIE_CATEGORY[i])
-        // rowsAdapter.add(ListRow(header, listRowAdapter))
+            rowsAdapter.add(ListRow(fetchedPage.toLong(), header, listRowAdapter))
+        }
 
         adapter = rowsAdapter
     }
