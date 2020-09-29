@@ -1,7 +1,7 @@
-package com.programacionymas.io.response
+package com.programacionymas.photosearchtv.io.response
 
 import com.google.gson.annotations.SerializedName
-import com.programacionymas.model.Photo
+import com.programacionymas.photosearchtv.model.Photo
 
 /*
 {

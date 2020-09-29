@@ -1,17 +1,16 @@
-package com.programacionymas.photosearchtv
+package com.programacionymas.photosearchtv.ui
 
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
-import com.programacionymas.model.Photo
-import com.programacionymas.photosearchtv.presenter.CardPresenter
+import com.programacionymas.photosearchtv.model.Photo
+import com.programacionymas.photosearchtv.ui.presenter.CardPresenter
 
 class SearchRunnable(private val updateRowsAdapter: (List<ListRow>)->Unit): Runnable {
 
     var searchQuery: String = ""
 
     override fun run() {
-
 
         updateRowsAdapter(getResults())
     }
@@ -22,7 +21,7 @@ class SearchRunnable(private val updateRowsAdapter: (List<ListRow>)->Unit): Runn
         return if (searchQuery.length < 3) {
             val resultsHeader = HeaderItem(0, "No search results for '$searchQuery'")
 
-            listRowAdapter.add(Photo())
+            // listRowAdapter.add(Photo())
 
             listOf(
                 ListRow(resultsHeader, listRowAdapter)

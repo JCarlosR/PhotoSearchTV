@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv.activity
+package com.programacionymas.photosearchtv.ui.activity
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity

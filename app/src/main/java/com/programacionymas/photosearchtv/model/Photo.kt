@@ -1,4 +1,4 @@
-package com.programacionymas.model
+package com.programacionymas.photosearchtv.model
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

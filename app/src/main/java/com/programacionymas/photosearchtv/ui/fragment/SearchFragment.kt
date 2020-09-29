@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv.fragment
+package com.programacionymas.photosearchtv.ui.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,7 +9,7 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.ObjectAdapter
-import com.programacionymas.photosearchtv.SearchRunnable
+import com.programacionymas.photosearchtv.ui.SearchRunnable
 
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {

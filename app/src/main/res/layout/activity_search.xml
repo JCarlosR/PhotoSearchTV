@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    class="com.programacionymas.photosearchtv.fragment.SearchFragment"
+    class="com.programacionymas.photosearchtv.ui.fragment.SearchFragment"
     android:id="@+id/main_browse_fragment"
-    android:name="com.programacionymas.photosearchtv.fragment.SearchFragment"
+    android:name="com.programacionymas.photosearchtv.ui.fragment.SearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SearchActivity"
+    tools:context=".ui.activity.SearchActivity"
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame" />

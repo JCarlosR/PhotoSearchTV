@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv.presenter
+package com.programacionymas.photosearchtv.ui.presenter
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -8,7 +8,7 @@ import androidx.leanback.widget.BaseCardView
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import com.programacionymas.model.Photo
+import com.programacionymas.photosearchtv.model.Photo
 import com.programacionymas.photosearchtv.R
 import kotlin.properties.Delegates
 

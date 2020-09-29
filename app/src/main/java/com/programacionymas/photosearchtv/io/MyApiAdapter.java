@@ -1,4 +1,4 @@
-package com.programacionymas.io;
+package com.programacionymas.photosearchtv.io;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

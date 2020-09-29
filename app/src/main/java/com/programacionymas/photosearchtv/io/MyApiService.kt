@@ -1,6 +1,6 @@
-package com.programacionymas.io
+package com.programacionymas.photosearchtv.io
 
-import com.programacionymas.io.response.GetPhotosResponse
+import com.programacionymas.photosearchtv.io.response.GetPhotosResponse
 import retrofit2.Call
 import retrofit2.http.*
 

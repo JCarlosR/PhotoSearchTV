@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv.fragment
+package com.programacionymas.photosearchtv.ui.fragment
 
 import android.content.Intent
 import android.graphics.Color
@@ -10,13 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
-import com.programacionymas.io.MyApiAdapter
-import com.programacionymas.io.response.GetPhotosResponse
-import com.programacionymas.model.Photo
-import com.programacionymas.photosearchtv.presenter.CardPresenter
+import com.programacionymas.photosearchtv.io.MyApiAdapter
+import com.programacionymas.photosearchtv.io.response.GetPhotosResponse
+import com.programacionymas.photosearchtv.model.Photo
+import com.programacionymas.photosearchtv.ui.presenter.CardPresenter
 import com.programacionymas.photosearchtv.R
-import com.programacionymas.photosearchtv.activity.PhotoActivity
-import com.programacionymas.photosearchtv.activity.SearchActivity
+import com.programacionymas.photosearchtv.ui.activity.PhotoActivity
+import com.programacionymas.photosearchtv.ui.activity.SearchActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
