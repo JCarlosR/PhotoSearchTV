@@ -128,7 +128,6 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         override fun onItemSelected(itemViewHolder: Presenter.ViewHolder?, item: Any?,
                                     rowViewHolder: RowPresenter.ViewHolder, row: Row) {
 
-            // Toast.makeText(activity, "row id (page) = ${row.id}", Toast.LENGTH_SHORT).show()
             val page = row.id
 
             Log.d("MainFragment", "row.id (page) = $page")

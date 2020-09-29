@@ -12,6 +12,7 @@ import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.ObjectAdapter
 import com.programacionymas.photosearchtv.ui.SearchRunnable
 import com.programacionymas.photosearchtv.ui.activity.SearchActivity
+import com.programacionymas.photosearchtv.ui.listeners.ItemViewClickedListener
 
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
@@ -28,7 +29,10 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     }
 
     private fun setupEventListeners() {
-        // onItemViewClickedListener = ItemViewClickedListener()
+        activity?.let {
+            setOnItemViewClickedListener(ItemViewClickedListener(it))
+        }
+
         // onItemViewSelectedListener = ItemViewSelectedListener()
     }
 
