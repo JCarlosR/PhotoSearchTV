@@ -17,13 +17,11 @@ import com.programacionymas.photosearchtv.ui.presenter.CardPresenter
 import com.programacionymas.photosearchtv.R
 import com.programacionymas.photosearchtv.ui.activity.PhotoActivity
 import com.programacionymas.photosearchtv.ui.activity.SearchActivity
+import com.programacionymas.photosearchtv.ui.listeners.ItemViewClickedListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-/**
- * Loads a grid of cards with movies to browse.
- */
 class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
 
     private lateinit var mBackgroundManager: BackgroundManager
@@ -117,39 +115,13 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
             startActivity(intent)
         }
 
-        onItemViewClickedListener = ItemViewClickedListener()
+        activity?.let {
+            onItemViewClickedListener = ItemViewClickedListener(it)
+        }
+
         onItemViewSelectedListener = ItemViewSelectedListener()
     }
 
-    private inner class ItemViewClickedListener : OnItemViewClickedListener {
-        override fun onItemClicked(
-                itemViewHolder: Presenter.ViewHolder,
-                item: Any,
-                rowViewHolder: RowPresenter.ViewHolder,
-                row: Row
-        ) {
-
-            if (item is Photo) {
-                // Log.d(TAG, "Item: $item")
-
-                val intent = Intent(activity, PhotoActivity::class.java)
-                intent.putExtra(PhotoActivity.PHOTO_PARAM, item)
-
-                activity?.let {
-                    val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        it,
-                        (itemViewHolder.view as ImageCardView).mainImageView,
-                        PhotoActivity.SHARED_ELEMENT_NAME)
-                        .toBundle()
-
-                    it.startActivity(intent, bundle)
-                }
-
-            } else if (item is String) {
-                Toast.makeText(activity, item, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     private inner class ItemViewSelectedListener : OnItemViewSelectedListener {
 

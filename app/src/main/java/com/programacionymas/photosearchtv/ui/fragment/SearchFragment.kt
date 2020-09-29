@@ -1,5 +1,6 @@
 package com.programacionymas.photosearchtv.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +11,7 @@ import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.ObjectAdapter
 import com.programacionymas.photosearchtv.ui.SearchRunnable
+import com.programacionymas.photosearchtv.ui.activity.SearchActivity
 
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
@@ -22,7 +24,12 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         super.onCreate(savedInstanceState)
         setSearchResultProvider(this)
 
-        // setOnItemClickedListener(getDefaultItemClickedListener())
+        setupEventListeners()
+    }
+
+    private fun setupEventListeners() {
+        // onItemViewClickedListener = ItemViewClickedListener()
+        // onItemViewSelectedListener = ItemViewSelectedListener()
     }
 
     private fun updateRowsAdapter(listRows: List<ListRow>) {

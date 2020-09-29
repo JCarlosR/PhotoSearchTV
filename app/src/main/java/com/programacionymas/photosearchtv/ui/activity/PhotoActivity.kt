@@ -30,12 +30,19 @@ class PhotoActivity : FragmentActivity() {
             return true
         }
 
-        if (event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            Toast.makeText(baseContext, "Right", Toast.LENGTH_SHORT).show()
-        } else if (event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-            Toast.makeText(baseContext, "Left", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(baseContext, "Keycode = " + event.keyCode, Toast.LENGTH_SHORT).show()
+        when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                Toast.makeText(baseContext, "Right", Toast.LENGTH_SHORT).show()
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                Toast.makeText(baseContext, "Left", Toast.LENGTH_SHORT).show()
+            }
+            KeyEvent.KEYCODE_BACK -> {
+                finish();
+            }
+            else -> {
+                Toast.makeText(baseContext, "Keycode = " + event.keyCode, Toast.LENGTH_SHORT).show()
+            }
         }
 
         return true
