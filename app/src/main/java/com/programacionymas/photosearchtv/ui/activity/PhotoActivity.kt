@@ -11,18 +11,25 @@ import kotlinx.android.synthetic.main.activity_photo.*
 
 class PhotoActivity : FragmentActivity() {
 
+    private lateinit var urls: Array<String>
+    private var index: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
 
-        val photo = intent?.getSerializableExtra(PHOTO_PARAM) as Photo
+        urls = intent?.getStringArrayExtra(PHOTO_URLS) as Array<String>
+        index = intent?.getIntExtra(PHOTO_INDEX, 0) ?: 0
 
+        displayImage()
+    }
+
+    private fun displayImage() {
         Glide.with(this)
-            .load(photo.getUrlLarge())
+            .load(urls[index])
             .centerCrop()
             .into(imageView)
     }
-
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // we will execute actions for the DOWN event
@@ -32,10 +39,22 @@ class PhotoActivity : FragmentActivity() {
 
         when (event.keyCode) {
             KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                Toast.makeText(baseContext, "Right", Toast.LENGTH_SHORT).show()
+                index += 1
+
+                if (index == urls.size) {
+                    index = 0
+                }
+
+                displayImage()
             }
             KeyEvent.KEYCODE_DPAD_LEFT -> {
-                Toast.makeText(baseContext, "Left", Toast.LENGTH_SHORT).show()
+                index -= 1
+
+                if (index < 0) {
+                    index = urls.size -1
+                }
+
+                displayImage()
             }
             KeyEvent.KEYCODE_BACK -> {
                 finish();
@@ -50,6 +69,7 @@ class PhotoActivity : FragmentActivity() {
 
     companion object {
         const val SHARED_ELEMENT_NAME = "hero"
-        const val PHOTO_PARAM = "Photo"
+        const val PHOTO_URLS = "PhotoUrls"
+        const val PHOTO_INDEX = "PhotoIndex"
     }
 }

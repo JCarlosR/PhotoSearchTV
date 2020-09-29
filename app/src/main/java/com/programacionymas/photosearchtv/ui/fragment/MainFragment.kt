@@ -23,13 +23,14 @@ import retrofit2.Response
 class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
 
     private val mPhotoPages: HashMap<Int, List<Photo>> = HashMap()
+    private val mPhotoUrls: HashMap<Int, List<String>> = HashMap()
 
     private val rowsAdapter by lazy {
         ArrayObjectAdapter(ListRowPresenter())
     }
 
     private val photosManager by lazy {
-        PhotosManager(mPhotoPages, rowsAdapter)
+        PhotosManager(mPhotoPages, mPhotoUrls, rowsAdapter)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +83,7 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         }
 
         activity?.let {
-            onItemViewClickedListener = ItemViewClickedListener(it)
+            onItemViewClickedListener = ItemViewClickedListener(it, mPhotoUrls)
         }
 
         onItemViewSelectedListener = ItemViewSelectedListener()

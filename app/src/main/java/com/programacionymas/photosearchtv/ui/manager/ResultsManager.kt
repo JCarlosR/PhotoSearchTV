@@ -9,6 +9,7 @@ import com.programacionymas.photosearchtv.ui.presenter.CardPresenter
 
 class ResultsManager(
     private val mPhotoPages: HashMap<Int, List<Photo>>,
+    private val mPhotoUrls: HashMap<Int, List<String>>,
     private val rowsAdapter: ArrayObjectAdapter
 ) {
 
@@ -29,6 +30,8 @@ class ResultsManager(
         }
 
         mPhotoPages[fetchedPage] = photos
+
+        mPhotoUrls[fetchedPage] = photos.map { it.getUrlLarge() }
 
         if (fetchedPage > lastFetchedPage)
             lastFetchedPage = fetchedPage

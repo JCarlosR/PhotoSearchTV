@@ -17,13 +17,14 @@ import com.programacionymas.photosearchtv.ui.manager.ResultsManager
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
 
     private val mPhotoPages: HashMap<Int, List<Photo>> = HashMap()
+    private val mPhotoUrls: HashMap<Int, List<String>> = HashMap()
 
     private val rowsAdapter by lazy {
         ArrayObjectAdapter(ListRowPresenter())
     }
 
     private val resultsManager by lazy {
-        ResultsManager(mPhotoPages, rowsAdapter)
+        ResultsManager(mPhotoPages, mPhotoUrls, rowsAdapter)
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -47,7 +48,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     private fun setupEventListeners() {
         activity?.let {
-            setOnItemViewClickedListener(ItemViewClickedListener(it))
+            setOnItemViewClickedListener(ItemViewClickedListener(it, mPhotoUrls))
         }
 
         setOnItemViewSelectedListener(ItemViewSelectedListener())
