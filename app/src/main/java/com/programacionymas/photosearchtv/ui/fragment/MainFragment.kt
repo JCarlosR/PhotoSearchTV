@@ -170,7 +170,7 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
 
     companion object {
         private const val TAG = "MainFragment"
-        private const val NUM_COLS = 6
+        const val NUM_COLS = 6
     }
 
     override fun onResponse(call: Call<GetPhotosResponse>, response: Response<GetPhotosResponse>) {
