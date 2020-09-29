@@ -4,21 +4,30 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.TextUtils
+import android.util.Log
 import androidx.leanback.app.SearchSupportFragment
-import androidx.leanback.widget.ArrayObjectAdapter
-import androidx.leanback.widget.ListRow
-import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.*
+import com.programacionymas.photosearchtv.model.Photo
 import com.programacionymas.photosearchtv.ui.SearchRunnable
 import com.programacionymas.photosearchtv.ui.listener.ItemViewClickedListener
 import com.programacionymas.photosearchtv.ui.manager.ColorBackgroundManager
+import com.programacionymas.photosearchtv.ui.manager.ResultsManager
 
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
-    private val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+
+    private val mPhotoPages: HashMap<Int, List<Photo>> = HashMap()
+
+    private val rowsAdapter by lazy {
+        ArrayObjectAdapter(ListRowPresenter())
+    }
+
+    private val resultsManager by lazy {
+        ResultsManager(mPhotoPages, rowsAdapter)
+    }
 
     private val handler = Handler(Looper.getMainLooper())
-    private val delayedLoad = SearchRunnable(::updateRowsAdapter)
+    private val delayedLoad = SearchRunnable(resultsManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +50,29 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
             setOnItemViewClickedListener(ItemViewClickedListener(it))
         }
 
-        // onItemViewSelectedListener = ItemViewSelectedListener()
+        setOnItemViewSelectedListener(ItemViewSelectedListener())
     }
 
-    private fun updateRowsAdapter(listRows: List<ListRow>) {
-        listRows.forEach {
-            rowsAdapter.add(it)
+    private inner class ItemViewSelectedListener : OnItemViewSelectedListener {
+
+        override fun onItemSelected(itemViewHolder: Presenter.ViewHolder?, item: Any?,
+                                    rowViewHolder: RowPresenter.ViewHolder, row: Row
+        ) {
+
+            val page = row.id
+
+            Log.d("SearchFragment", "row.id (page) = $page")
+
+            if (resultsManager.shouldFetch(page.toInt())) {
+                runQuery(page = resultsManager.lastFetchedPage + 1)
+            }
         }
     }
 
     override fun getResultsAdapter() = rowsAdapter
 
-
     override fun onQueryTextChange(newQuery: String): Boolean {
+        rowsAdapter.clear()
         runQuery(newQuery)
         return true
     }
@@ -63,14 +82,14 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         return true
     }
 
-    private fun runQuery(query: String) {
-        rowsAdapter.clear()
-
-        if (!TextUtils.isEmpty(query)) {
-            delayedLoad.searchQuery = query
-            handler.removeCallbacks(delayedLoad)
-            handler.postDelayed(delayedLoad, SEARCH_DELAY_MS)
+    private fun runQuery(query: String? = null, page: Int = 1) {
+        query?.let {
+            delayedLoad.searchQuery = it
         }
+        delayedLoad.page = page
+
+        handler.removeCallbacks(delayedLoad)
+        handler.postDelayed(delayedLoad, SEARCH_DELAY_MS)
     }
 
     companion object {
