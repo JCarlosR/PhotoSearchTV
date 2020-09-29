@@ -9,6 +9,7 @@ import com.programacionymas.photosearchtv.io.response.GetPhotosResponse
 import com.programacionymas.photosearchtv.model.Photo
 import com.programacionymas.photosearchtv.ui.fragment.MainFragment
 import com.programacionymas.photosearchtv.ui.presenter.CardPresenter
+import com.programacionymas.photosearchtv.ui.util.GetPhotosService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,8 +20,8 @@ class SearchRunnable(private val updateRowsAdapter: (List<ListRow>)->Unit): Runn
     var searchQuery: String = ""
 
     override fun run() {
-        val call = MyApiAdapter.getApiService().getPhotos("869d0e99855f9a170627b77ef02bc13a", "flickr.photos.search", text = searchQuery)
-        call.enqueue(this)
+        GetPhotosService(MainFragment.NUM_COLS, 1)
+            .enqueue(this, searchQuery)
     }
 
     private fun getResults(photos: List<Photo>): List<ListRow> {

@@ -5,19 +5,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
-import com.programacionymas.photosearchtv.io.MyApiAdapter
 import com.programacionymas.photosearchtv.io.response.GetPhotosResponse
 import com.programacionymas.photosearchtv.model.Photo
-import com.programacionymas.photosearchtv.ui.presenter.CardPresenter
 import com.programacionymas.photosearchtv.R
-import com.programacionymas.photosearchtv.ui.activity.PhotoActivity
 import com.programacionymas.photosearchtv.ui.activity.SearchActivity
-import com.programacionymas.photosearchtv.ui.listeners.ItemViewClickedListener
+import com.programacionymas.photosearchtv.ui.listener.ItemViewClickedListener
+import com.programacionymas.photosearchtv.ui.util.GetPhotosService
+import com.programacionymas.photosearchtv.ui.manager.ColorBackgroundManager
+import com.programacionymas.photosearchtv.ui.manager.PhotosManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,33 +28,29 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         ArrayObjectAdapter(ListRowPresenter())
     }
 
-    private var lastFetchedPage: Int = 1
-    private var alreadyFetching: Boolean = false
-    private var hasMorePages: Boolean = true
+    private val photosManager by lazy {
+        PhotosManager(mPhotoPages, rowsAdapter)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "onCreate")
         super.onCreate(savedInstanceState)
 
-        fetchPhotos(1)
         headersState = HEADERS_DISABLED
+        fetchPhotos(1)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         Log.i(TAG, "onActivityCreated")
         super.onActivityCreated(savedInstanceState)
 
-        prepareBackgroundManager()
+        activity?.let {
+            ColorBackgroundManager(it).set(Color.BLACK)
+        }
 
         setupUIElements()
 
         setupEventListeners()
-    }
-
-    private fun prepareBackgroundManager() {
-        val backgroundManager = BackgroundManager.getInstance(activity)
-        backgroundManager.attach(activity?.window)
-        backgroundManager.color = Color.BLACK
     }
 
     private fun setupUIElements() {
@@ -68,43 +62,18 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
             // search button color
             searchAffordanceColor = ContextCompat.getColor(it, R.color.search_opaque)
         }
+
+        adapter = rowsAdapter
     }
 
     private fun fetchPhotos(page: Int) {
         Log.d("MainFragment", "Fetching page $page")
-        alreadyFetching = true
 
-        val call = MyApiAdapter.getApiService().getPhotos(
-            "869d0e99855f9a170627b77ef02bc13a", galleryId = "66911286-72157647277042064",
-            page = page, perPage = NUM_COLS
-        )
-
-        call.enqueue(this)
+        photosManager.fetching = true
+        GetPhotosService(NUM_COLS, page).enqueue(this)
     }
 
-    private fun loadRows(fetchedPage: Int) {
-        val cardPresenter = CardPresenter()
 
-        val listRowAdapter = ArrayObjectAdapter(cardPresenter)
-
-        val photos: List<Photo>? = mPhotoPages[fetchedPage]
-
-        photos?.let {
-            for (photo in it) {
-                listRowAdapter.add(photo)
-            }
-
-            val header = if (fetchedPage == 1) {
-                 HeaderItem(0, "Trending Now On Flickr")
-            } else {
-                null
-            }
-
-            rowsAdapter.add(ListRow(fetchedPage.toLong(), header, listRowAdapter))
-        }
-
-        adapter = rowsAdapter
-    }
 
     private fun setupEventListeners() {
         setOnSearchClickedListener {
@@ -128,10 +97,9 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
             val page = row.id
 
             Log.d("MainFragment", "row.id (page) = $page")
-            Log.d("MainFragment", "lastFetchedPage = $lastFetchedPage")
 
-            if (!alreadyFetching && page.toInt() == lastFetchedPage && hasMorePages) {
-                fetchPhotos(lastFetchedPage + 1)
+            if (photosManager.shouldFetch(page.toInt())) {
+                fetchPhotos(photosManager.lastFetchedPage + 1)
             }
         }
     }
@@ -147,30 +115,16 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
                 val photos = it.photos.photo
                 val fetchedPage = it.photos.page
 
-                if (photos.isEmpty()) {
-                    hasMorePages = false
-                    return
-                }
-
-                if (photos.size < NUM_COLS) {
-                    hasMorePages = false
-                }
-
-                mPhotoPages[fetchedPage] = photos
-
-                if (fetchedPage > lastFetchedPage)
-                    lastFetchedPage = fetchedPage
-
-                loadRows(fetchedPage)
+                photosManager.processPhotos(photos, fetchedPage)
             }
         }
 
-        alreadyFetching = false
+        photosManager.fetching = false
     }
 
     override fun onFailure(call: Call<GetPhotosResponse>, t: Throwable) {
         Toast.makeText(activity, t.localizedMessage, Toast.LENGTH_SHORT).show()
 
-        alreadyFetching = false
+        photosManager.fetching = false
     }
 }

@@ -1,4 +1,4 @@
-package com.programacionymas.photosearchtv.ui.listeners
+package com.programacionymas.photosearchtv.ui.listener
 
 import android.content.Intent
 import androidx.core.app.ActivityOptionsCompat

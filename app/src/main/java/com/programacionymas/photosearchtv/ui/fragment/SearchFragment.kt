@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
-import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.SearchSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
-import androidx.leanback.widget.ObjectAdapter
 import com.programacionymas.photosearchtv.ui.SearchRunnable
-import com.programacionymas.photosearchtv.ui.listeners.ItemViewClickedListener
+import com.programacionymas.photosearchtv.ui.listener.ItemViewClickedListener
+import com.programacionymas.photosearchtv.ui.manager.ColorBackgroundManager
 
 
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
@@ -31,14 +30,11 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        prepareBackgroundManager()
+        activity?.let {
+            ColorBackgroundManager(it).set(Color.BLACK)
+        }
     }
 
-    private fun prepareBackgroundManager() {
-        val backgroundManager = BackgroundManager.getInstance(activity)
-        backgroundManager.attach(activity?.window)
-        backgroundManager.color = Color.BLACK
-    }
 
     private fun setupEventListeners() {
         activity?.let {
@@ -54,23 +50,20 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         }
     }
 
-    override fun getResultsAdapter(): ObjectAdapter {
-        return rowsAdapter
-    }
+    override fun getResultsAdapter() = rowsAdapter
+
 
     override fun onQueryTextChange(newQuery: String): Boolean {
-        rowsAdapter.clear()
-
-        if (!TextUtils.isEmpty(newQuery)) {
-            delayedLoad.searchQuery = newQuery
-            handler.removeCallbacks(delayedLoad)
-            handler.postDelayed(delayedLoad, SEARCH_DELAY_MS)
-        }
-
+        runQuery(newQuery)
         return true
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
+        runQuery(query)
+        return true
+    }
+
+    private fun runQuery(query: String) {
         rowsAdapter.clear()
 
         if (!TextUtils.isEmpty(query)) {
@@ -78,8 +71,6 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
             handler.removeCallbacks(delayedLoad)
             handler.postDelayed(delayedLoad, SEARCH_DELAY_MS)
         }
-
-        return true
     }
 
     companion object {
