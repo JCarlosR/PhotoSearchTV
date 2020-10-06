@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "254477728181",
+    "firebase_url": "https://nsc-game.firebaseio.com",
+    "project_id": "nsc-game",
+    "storage_bucket": "nsc-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254477728181:android:957c705c7037659a0dc1fc",
+        "android_client_info": {
+          "package_name": "com.programacionymas.photosearchtv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254477728181-np5uivoemeg55gn1389tfni8ts0fitk4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.programacionymas.photosearchtv",
+            "certificate_hash": "eafe812723f422282bd1523be977f205c692a674"
+          }
+        },
+        {
+          "client_id": "254477728181-qrbk1seu8jnsf49renk1dgulgv54ks25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEFyuhX0rTTzyA-HVw_H4jutLdX3_whX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254477728181-qrbk1seu8jnsf49renk1dgulgv54ks25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

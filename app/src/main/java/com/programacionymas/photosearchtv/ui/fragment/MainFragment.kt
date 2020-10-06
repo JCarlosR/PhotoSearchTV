@@ -52,6 +52,9 @@ class MainFragment : BrowseSupportFragment(), Callback<GetPhotosResponse> {
         setupUIElements()
 
         setupEventListeners()
+
+        // To test Crashlytics
+        // throw RuntimeException("Test Crash")
     }
 
     private fun setupUIElements() {
